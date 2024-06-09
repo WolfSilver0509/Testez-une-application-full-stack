@@ -1,28 +1,40 @@
 import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
+import { of } from 'rxjs';
 import { SessionService } from 'src/app/services/session.service';
-
+import { UserService } from 'src/app/services/user.service';
 import { MeComponent } from './me.component';
-// import { expect } from 'jest';  ===> A voir !
+
+import { expect } from '@jest/globals';
 
 describe('MeComponent', () => {
   let component: MeComponent;
   let fixture: ComponentFixture<MeComponent>;
+  let userService: UserService;
+  let sessionService: SessionService;
+  let router: Router;
 
-  // Nous créons un faux service de session pour simuler le comportement de notre vrai service
   const mockSessionService = {
     sessionInformation: {
       admin: true,
       id: 1
-    }
+    },
+    logOut: jest.fn()
   }
 
-  // Avant chaque test, nous configurons notre module de test
+  const mockUserService = {
+    getById: jest.fn().mockReturnValue(of({})),
+    delete: jest.fn().mockReturnValue(of(null))
+  }
+
+  const mockRouter = {
+    navigate: jest.fn()
+  }
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MeComponent],
@@ -30,26 +42,42 @@ describe('MeComponent', () => {
         MatSnackBarModule,
         HttpClientModule,
         MatCardModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatInputModule
+        MatIconModule
       ],
-      // Nous remplaçons le vrai service de session par notre faux service
-      providers: [{ provide: SessionService, useValue: mockSessionService }],
+      providers: [
+        { provide: SessionService, useValue: mockSessionService },
+        { provide: UserService, useValue: mockUserService },
+        { provide: Router, useValue: mockRouter }
+      ],
     })
       .compileComponents();
 
-    // Nous créons une instance de notre composant à tester
     fixture = TestBed.createComponent(MeComponent);
     component = fixture.componentInstance;
-    // Nous déclenchons le cycle de vie du composant pour qu'il initialise ses propriétés
+    userService = TestBed.inject(UserService);
+    sessionService = TestBed.inject(SessionService);
+    router = TestBed.inject(Router);
     fixture.detectChanges();
   });
 
-  // Notre premier test vérifie simplement que le composant peut être correctement créé
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  // Vous pouvez ajouter d'autres tests ici pour vérifier le comportement de votre composant
+  it('should call userService.getById on ngOnInit', () => {
+    component.ngOnInit();
+    expect(userService.getById).toHaveBeenCalledWith('1');
+  });
+
+  it('should call window.history.back on back', () => {
+    const spy = jest.spyOn(window.history, 'back');
+    component.back();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should call userService.delete, sessionService.logOut and router.navigate on delete', () => {
+    mockUserService.delete.mockReturnValue(of({})); // Ensure delete returns an observable
+    component.delete();
+    expect(userService.delete).toHaveBeenCalledWith('1');
+  });
 });
