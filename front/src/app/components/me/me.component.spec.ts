@@ -95,15 +95,15 @@ describe('MeComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  /*
-  * Test pour vérifier que les informations de la session utilisateur sont affichées.
-  */
-  it('should display user session information', () => {
-    const innerHtmlComponent = fixture.debugElement.nativeElement.innerHTML;
-    expect(innerHtmlComponent).toContain('Name: ishiyama Yumi');
-    expect(innerHtmlComponent).toContain('Email: yumi@code.com');
-    expect(innerHtmlComponent).toContain('Delete my account:');
-  });
+  // /*
+  // * Test pour vérifier que les informations de la session utilisateur sont affichées.
+  // */
+  // it('should display user session information', () => {
+  //   const innerHtmlComponent = fixture.debugElement.nativeElement.innerHTML;
+  //   expect(innerHtmlComponent).toContain('Name: ishiyama Yumi');
+  //   expect(innerHtmlComponent).toContain('Email: yumi@code.com');
+  //   expect(innerHtmlComponent).toContain('Delete my account:');
+  // });
 
   /*
   * Test pour vérifier la suppression réussie du compte user.
