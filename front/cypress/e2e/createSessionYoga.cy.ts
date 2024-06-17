@@ -47,7 +47,7 @@ describe('Tests de création de session (Create session spec)', () => {
     cy.intercept('POST', '/api/session', {
       statusCode: 201, // Code de réponse indiquant la création
       body: {
-        message: "Session créée avec succès !" // Message de confirmation (à ajuster si nécessaire)
+        message: "Session créée avec succès !" // Message de confirmation
       }
     });
 
@@ -62,15 +62,15 @@ describe('Tests de création de session (Create session spec)', () => {
     cy.url().should('include', '/sessions');
 
     // Cliquer sur le bouton de création de session
-    cy.get('button').click(); // Remplacer par le sélecteur exact du bouton
+    cy.get('button').click();
 
     // Vérifier la redirection vers la page de création de session
     cy.url().should('include', '/sessions/create');
 
     // Remplir le formulaire de création de session
-    cy.get('input[formControlName=name]').type("Titre de la session"); // Ajuster le sélecteur si nécessaire
+    cy.get('input[formControlName=name]').type("Titre de la session");
 
-    cy.get('input[formControlName=date]').type("2023-01-12"); // Ajuster le sélecteur si nécessaire
+    cy.get('input[formControlName=date]').type("2023-01-12");
 
     // Cliquer sur le sélecteur d'enseignant
     cy.get('mat-select').click();
@@ -78,10 +78,10 @@ describe('Tests de création de session (Create session spec)', () => {
     // Sélectionner le premier enseignant disponible (peut être ajusté)
     cy.get('mat-option').first().click();
 
-    cy.get('textarea').type("Description de la session"); // Ajuster le sélecteur si nécessaire
+    cy.get('textarea').type("Description de la session");
 
 // Cliquer sur le bouton "Enregistrer"
-    cy.get('button').contains('Save').click(); // Ajuster le sélecteur si nécessaire
+    cy.get('button').contains('Save').click();
     cy.wait(2000); // Pause de 2 secondes pour observer le clic
 
 // Vérifier la redirection vers la page de liste des sessions
