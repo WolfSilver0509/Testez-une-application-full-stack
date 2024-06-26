@@ -46,7 +46,10 @@ Si vous envisagez de travailler sur la partie frontend de l'application, assurez
 ```
 npm install -g @angular/cli
 ```
-Git : Assurez-vous que Git est installé sur votre système pour cloner le dépôt du projet. Vous pouvez télécharger Git ici.
+
+### Git : Assurez-vous que Git est installé sur votre système pour cloner le dépôt du projet. 
+
+Vous pouvez télécharger Git [ici](https://git-scm.com/downloads).
 
 ### 📍 Démarrer le projet 📍
 
