@@ -1,6 +1,6 @@
 # 🧘🏽‍♀️ Présentation du Projet 🧘🏽‍♀️
 
-Ce projet est une application web de yoga où vous pouvez vous connecter, créer des sessions de yoga si vous êtes administrateur ou simplement vous inscrire à des sessions et voir les détails. Des tests sont réalisés pour chaque fonctionnalité de l'application, incluant des tests front-end, back-end et end-to-end en utilisant Jest, Cypress et Jacoco.
+Ce projet est une application web de yoga où vous pouvez vous connecter, créer des sessions de yoga si vous êtes administrateur ou simplement vous inscrire à des sessions et voir les détails. Des tests sont réalisés pour chaque fonctionnalité de l'application, incluant des tests front-end, back-end et end-to-end en utilisant Jest, Cypress et JUnit , Mockito et Jacoco.
 
 ## Configuration de Spring Boot ☕
 
