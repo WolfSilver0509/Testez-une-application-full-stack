@@ -36,19 +36,21 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @AutoConfigureMockMvc
 class SessionControllerTest {
 
+    // MockBean permet de créer des doublures (mocks) des composants
     @MockBean
     private SessionRepository sessionRepository;
 
     @MockBean
     private UserRepository userRepository;
 
+    // Injection de la dépendance MockMvc pour tester les contrôleurs Web
     @Autowired
     private MockMvc mockMvc;
 
     @Test
     @WithMockUser(username = "yoga@studio.com", password = "test!1234", roles = {"ADMIN"})
     public void testFindById() throws Exception {
-        // Prepare
+        // Préparation des données de test
         long sessionId = 1L;
         Session session = new Session();
         session.setId(sessionId);
@@ -56,27 +58,26 @@ class SessionControllerTest {
         SessionDto sessionDto = new SessionDto();
         sessionDto.setId(sessionId);
 
-        when(sessionRepository.findById(sessionId)).thenReturn(java.util.Optional.of(session));
+        when(sessionRepository.findById(sessionId)).thenReturn(Optional.of(session));
 
-        // Execute and Verify
+        // Exécution et vérification
         mockMvc.perform(MockMvcRequestBuilders.get("/api/session/{id}", sessionId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(sessionId))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Session 1"));
-
     }
 
     @Test
     @WithMockUser(username = "yoga@studio.com", password = "test!1234", roles = {"ADMIN"})
     public void testInvalidUpdatePath() throws Exception {
-        // Prepare
-        long invalidSessionId = -1L; // Invalid session ID
+        // Préparation des données de test
+        long invalidSessionId = -1L; // ID de session invalide
         SessionDto sessionDto = new SessionDto();
         sessionDto.setId(invalidSessionId);
         sessionDto.setName("Invalid Session");
 
-        // Execute and Verify
+        // Exécution et vérification
         mockMvc.perform(MockMvcRequestBuilders.put("/api/session/{id}", invalidSessionId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(sessionDto)))
@@ -86,12 +87,12 @@ class SessionControllerTest {
     @Test
     @WithMockUser(username = "yoga@studio.com", password = "test!1234", roles = {"ADMIN"})
     public void testSessionNotFound() throws Exception {
-        // Prepare
-        long nonExistentSessionId = 9999L; // Non-existent session ID
+        // Préparation des données de test
+        long nonExistentSessionId = 9999L; // ID de session non existante
 
         when(sessionRepository.findById(nonExistentSessionId)).thenReturn(Optional.empty());
 
-        // Execute and Verify
+        // Exécution et vérification
         mockMvc.perform(MockMvcRequestBuilders.get("/api/session/{id}", nonExistentSessionId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
@@ -100,10 +101,10 @@ class SessionControllerTest {
     @Test
     @WithMockUser(username = "yoga@studio.com", password = "test!1234", roles = {"ADMIN"})
     public void testFindByIdNumberFormatException() throws Exception {
-        // Prepare
-        String invalidSessionId = "abc"; // Invalid session ID (not a number)
+        // Préparation des données de test
+        String invalidSessionId = "oklm"; // ID de session invalide (non numérique)
 
-        // Execute and Verify
+        // Exécution et vérification
         mockMvc.perform(get("/api/session/{id}", invalidSessionId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -112,7 +113,7 @@ class SessionControllerTest {
     @Test
     @WithMockUser(username = "yoga@studio.com", password = "test!1234", roles = {"ADMIN"})
     public void testFindAll() throws Exception {
-        // Prepare
+        // Préparation des données de test
         List<Session> sessions = new ArrayList<>();
         Session session1 = new Session();
         session1.setId(1L);
@@ -123,7 +124,7 @@ class SessionControllerTest {
 
         when(sessionRepository.findAll()).thenReturn(sessions);
 
-        // Execute and Verify
+        // Exécution et vérification
         mockMvc.perform(MockMvcRequestBuilders.get("/api/session")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -134,14 +135,13 @@ class SessionControllerTest {
     @Test
     @WithMockUser(username = "yoga@studio.com", password = "test!1234", roles = {"ADMIN"})
     public void testCreate() throws Exception {
-        // Prepare
+        // Préparation des données de test
         SessionDto sessionDto = new SessionDto();
         sessionDto.setName("Session 1");
         sessionDto.setDate(new Date());
         sessionDto.setTeacher_id(1L);
         sessionDto.setUsers(new ArrayList<>());
         sessionDto.setDescription("Description");
-
 
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(sessionDto);
@@ -154,7 +154,7 @@ class SessionControllerTest {
         session.setTeacher(new Teacher());
         when(sessionRepository.save(any(Session.class))).thenReturn(session);
 
-        // Execute and Verify
+        // Exécution et vérification
         mockMvc.perform(MockMvcRequestBuilders.post("/api/session")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
@@ -163,13 +163,12 @@ class SessionControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Session 1"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("Description"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.date").exists());
-
     }
 
     @Test
     @WithMockUser(username = "yoga@studio.com", password = "test!1234", roles = {"ADMIN"})
     public void testUpdate() throws Exception {
-        // Prepare
+        // Préparation des données de test
         long sessionId = 1L;
         SessionDto sessionDto = new SessionDto();
         sessionDto.setId(sessionId);
@@ -186,7 +185,7 @@ class SessionControllerTest {
 
         when(sessionRepository.save(any(Session.class))).thenReturn(session);
 
-        // Execute and Verify
+        // Exécution et vérification
         mockMvc.perform(MockMvcRequestBuilders.put("/api/session/{id}", sessionId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(sessionDto)))
@@ -199,7 +198,7 @@ class SessionControllerTest {
     @Test
     @WithMockUser(username = "yoga@studio.com", password = "test!1234", roles = {"ADMIN"})
     public void testDelete() throws Exception {
-        // Prepare
+        // Préparation des données de test
         long sessionId = 1L;
         Session session = new Session();
         session.setId(sessionId);
@@ -207,7 +206,7 @@ class SessionControllerTest {
         when(sessionRepository.save(any(Session.class))).thenReturn(session);
         when(sessionRepository.findById(sessionId)).thenReturn(Optional.of(session));
 
-        // Execute and Verify
+        // Exécution et vérification
         mockMvc.perform(delete("/api/session/{id}", sessionId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -219,10 +218,10 @@ class SessionControllerTest {
     @Test
     @WithMockUser(username = "yoga@studio.com", password = "test!1234", roles = {"ADMIN"})
     public void testDeleteNumberFormatException() throws Exception {
-        // Prepare
-        String invalidSessionId = "abc"; // Invalid session ID (not a number)
+        // Préparation des données de test
+        String invalidSessionId = "oklm"; // ID de session invalide (non numérique)
 
-        // Execute and Verify
+        // Exécution et vérification
         mockMvc.perform(delete("/api/session/{id}", invalidSessionId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -231,12 +230,12 @@ class SessionControllerTest {
     @Test
     @WithMockUser(username = "yoga@studio.com", password = "test!1234", roles = {"ADMIN"})
     public void testSaveWithNonExistentSession() throws Exception {
-        // Prepare
-        long nonExistentSessionId = 9999L; // Non-existent session ID
+        // Préparation des données de test
+        long nonExistentSessionId = 5555L; // ID de session non existante
 
         when(sessionRepository.findById(nonExistentSessionId)).thenReturn(Optional.empty());
 
-        // Execute and Verify
+        // Exécution et vérification
         mockMvc.perform(delete("/api/session/{id}", nonExistentSessionId))
                 .andExpect(status().isNotFound());
     }
@@ -244,7 +243,7 @@ class SessionControllerTest {
     @Test
     @WithMockUser(username = "yoga@studio.com", password = "test!1234", roles = {"ADMIN"})
     public void testParticipate() throws Exception {
-        // Prepare
+        // Préparation des données de test
         long sessionId = 1L;
         long userId = 1L;
         Session session = new Session();
@@ -258,7 +257,7 @@ class SessionControllerTest {
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(sessionRepository.save(any(Session.class))).thenReturn(new Session());
 
-        // Execute and Verify
+        // Exécution et vérification
         mockMvc.perform(MockMvcRequestBuilders.post("/api/session/{id}/participate/{userId}", sessionId, userId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -270,7 +269,7 @@ class SessionControllerTest {
     @Test
     @WithMockUser(username = "yoga@studio.com", password = "test!1234", roles = {"ADMIN"})
     public void testNoLongerParticipate() throws Exception {
-        // Prepare
+        // Préparation des données de test
         long sessionId = 1L;
         long userId = 1L;
         Session session = new Session();
@@ -283,7 +282,7 @@ class SessionControllerTest {
         when(sessionRepository.findById(sessionId)).thenReturn(Optional.of(session));
         when(sessionRepository.save(any(Session.class))).thenReturn(new Session());
 
-        // Execute and Verify
+        // Exécution et vérification
         mockMvc.perform(delete("/api/session/{id}/participate/{userId}", sessionId, userId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -295,10 +294,11 @@ class SessionControllerTest {
     @Test
     @WithMockUser(username = "yoga@studio.com", password = "test!1234", roles = {"ADMIN"})
     public void testParticipateNumberFormatException() throws Exception {
-        // Prepare
-        String invalidSessionId = "abc"; // Invalid session ID (not a number)
-        String userId = "1"; // Valid user ID
-        // Execute and Verify
+        // Préparation des données de test
+        String invalidSessionId = "oklm"; // ID de session invalide (non numérique)
+        String userId = "1"; // ID d'utilisateur valide
+
+        // Exécution et vérification
         mockMvc.perform(post("/api/session/{id}/participate/{userId}", invalidSessionId, userId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -307,16 +307,17 @@ class SessionControllerTest {
     @Test
     @WithMockUser(username = "yoga@studio.com", password = "test!1234", roles = {"ADMIN"})
     public void testNoLongerParticipateNumberFormatException() throws Exception {
-        // Prepare
-        String invalidSessionId = "abc"; // Invalid session ID (not a number)
-        String userId = "1"; // Valid user ID
-        // Execute and Verify
+        // Préparation des données de test
+        String invalidSessionId = "oklm"; // ID de session invalide (non numérique)
+        String userId = "1"; // ID d'utilisateur valide
+
+        // Exécution et vérification
         mockMvc.perform(delete("/api/session/{id}/participate/{userId}", invalidSessionId, userId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
 
-    // Helper method to convert objects to JSON strings
+    // Méthode auxiliaire pour convertir les objets en chaînes JSON
     private String asJsonString(final Object obj) {
         try {
             return new ObjectMapper().writeValueAsString(obj);

@@ -38,7 +38,7 @@ public class UserControllerTest {
     @Test
     @WithMockUser(username = "yoga@studio.com", password = "test!1234", roles = {"ADMIN"})
     public void testFindById() throws Exception {
-        // Préparation
+        // Préparation des données de test
         long userId = 1L;
         User user = new User();
         user.setId(userId);
@@ -63,7 +63,7 @@ public class UserControllerTest {
     @Test
     @WithMockUser(username = "yoga@studio.com", password = "test!1234", roles = {"ADMIN"})
     public void testFindByIdNonExistentUser() throws Exception {
-        // Préparation
+        // Préparation des données de test
         long nonExistentUserId = 555; // ID utilisateur inexistant
 
         when(userRepository.findById(nonExistentUserId)).thenReturn(Optional.empty());
@@ -77,7 +77,7 @@ public class UserControllerTest {
     @Test
     @WithMockUser(username = "yoga@studio.com", password = "test!1234", roles = {"ADMIN"})
     public void testFindByIdNumberFormatException() throws Exception {
-        // Préparation
+        // Préparation des données de test
         String invalidUserId = "JeCodeParPassion"; // ID utilisateur invalide (non numérique)
 
         // Exécution et vérification
@@ -89,7 +89,7 @@ public class UserControllerTest {
     @Test
     @WithMockUser(username = "yoga@studio.com", password = "test!1234", roles = {"ADMIN"})
     public void testDelete() throws Exception {
-        // Préparation
+        // Préparation des données de test
         long userId = 1L;
         SecurityContext securityContext = mock(SecurityContext.class);
         Authentication authentication = mock(Authentication.class);
@@ -118,8 +118,8 @@ public class UserControllerTest {
     @Test
     @WithMockUser(username = "yoga@studio.com", password = "test!1234", roles = {"ADMIN"})
     public void testDeleteNonExistentUser() throws Exception {
-        // Préparation
-        long nonExistentUserId = 9999L; // ID utilisateur inexistant
+        // Préparation des données de test
+        long nonExistentUserId = 555L; // ID utilisateur inexistant
 
         when(userRepository.findById(nonExistentUserId)).thenReturn(Optional.empty());
 
@@ -132,7 +132,7 @@ public class UserControllerTest {
     @Test
     @WithMockUser(username = "different@user.com", password = "test!5678", roles = {"USER"})
     public void testDeleteUnauthorizedUser() throws Exception {
-        // Préparation
+        // Préparation des données de test
         long userId = 1L;
         User user = new User();
         user.setId(userId);
@@ -152,7 +152,7 @@ public class UserControllerTest {
     @Test
     @WithMockUser(username = "yoga@studio.com", password = "test!1234", roles = {"ADMIN"})
     public void testDeleteNumberFormatException() throws Exception {
-        // Préparation
+        // Préparation des données de test
         String invalidUserId = "JeCodeParPassion"; // ID utilisateur invalide (non numérique)
 
         // Exécution et vérification
