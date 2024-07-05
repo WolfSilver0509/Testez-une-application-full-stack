@@ -1,5 +1,6 @@
-package com.openclassrooms.starterjwt.security.services;
+package com.openclassrooms.starterjwt.security;
 
+import com.openclassrooms.starterjwt.security.services.UserDetailsImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.GrantedAuthority;
