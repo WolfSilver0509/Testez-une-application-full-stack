@@ -1,0 +1,7 @@
+import "./register.cy"
+import "./login.cy"
+import "./meComponent.cy"
+import "./createSessionYoga.cy"
+import "./participeYogaSession.cy"
+import "./notFound.cy"
+import "./delMyAccount.cy"

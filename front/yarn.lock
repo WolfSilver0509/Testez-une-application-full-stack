@@ -2275,7 +2275,7 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@28.1.3":
+"@types/jest@^28.1.3":
   "integrity" "sha512-Tsbjk8Y2hkBaY/gJsataeb4q9Mubw9EOz7+4RjPkzD5KjTvHHs7cpws22InaoXxAVAhF5HfFbzJjo6oKWqSZLw=="
   "resolved" "https://registry.npmjs.org/@types/jest/-/jest-28.1.3.tgz"
   "version" "28.1.3"
@@ -3869,7 +3869,7 @@
   dependencies:
     "cssom" "~0.3.6"
 
-"cypress@*", "cypress@10.4.0":
+"cypress@*", "cypress@^10.4.0":
   "integrity" "sha512-OM7F8MRE01SHQRVVzunid1ZK1m90XTxYnl+7uZfIrB4CYqUDCrZEeSyCXzIbsS6qcaijVCAhqDL60SxG8N6hew=="
   "resolved" "https://registry.npmjs.org/cypress/-/cypress-10.4.0.tgz"
   "version" "10.4.0"
